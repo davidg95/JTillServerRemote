@@ -24,8 +24,6 @@ import java.net.ServerSocket;
 import java.net.UnknownHostException;
 import java.util.Properties;
 import java.util.Timer;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 
 /**
@@ -38,7 +36,7 @@ public class JTillServerRemote {
     public static ServerConnection sc;
     public static GUI g;
 
-    public static String HOST_NAME = "Test";
+    public static String HOST_NAME = "RemoteAppConnection";
     public static String SERVER_ADDRESS = "127.0.0.1";
     public static int PORT = 600;
 
