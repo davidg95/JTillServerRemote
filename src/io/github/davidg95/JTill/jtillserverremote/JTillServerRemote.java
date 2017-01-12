@@ -61,11 +61,11 @@ public class JTillServerRemote {
 
     public JTillServerRemote() {
         icon = new javax.swing.ImageIcon(getClass().getResource("/io/github/davidg95/JTill/resources/tillIcon.png")).getImage();
-        sc = new ServerConnection("Test");
+        sc = new ServerConnection(HOST_NAME);
         tryConnect();
         data = new Data(sc, g);
         if (!GraphicsEnvironment.isHeadless()) {
-            g = new GUI(data, sc);
+            g = new GUI(data, sc, true);
         }
     }
 
