@@ -23,7 +23,6 @@ import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.UnknownHostException;
 import java.util.Properties;
-import java.util.Timer;
 import javax.swing.JOptionPane;
 
 /**
@@ -39,13 +38,6 @@ public class JTillServerRemote {
     public static String HOST_NAME = "RemoteAppConnection";
     public static String SERVER_ADDRESS = "127.0.0.1";
     public static int PORT = 600;
-
-    private ServerSocket s;
-    private ConnectionAcceptThread connThread;
-
-    public static Timer updateTimer;
-//    public static DatabaseUpdate updateTask;
-    public static long updateInterval = 60000L;
 
     public static Image icon;
     public static TrayIcon trayIcon;
@@ -88,17 +80,14 @@ public class JTillServerRemote {
         if (!GraphicsEnvironment.isHeadless()) {
             TillSplashScreen.showSplashScreen();
             g.databaseLogin();
-        } else {
+            TillSplashScreen.addBar(50);
+            if (!GraphicsEnvironment.isHeadless()) {
+                TillSplashScreen.hideSplashScreen();
+                g.setVisible(true);
+                g.login();
+            } else {
 
-        }
-        if (connThread != null) {
-            connThread.start();
-        }
-        TillSplashScreen.addBar(50);
-        if (!GraphicsEnvironment.isHeadless()) {
-            TillSplashScreen.hideSplashScreen();
-            g.setVisible(true);
-            g.login();
+            }
         } else {
 
         }
