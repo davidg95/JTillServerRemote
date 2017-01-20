@@ -6,7 +6,6 @@
 package io.github.davidg95.JTill.jtillserverremote;
 
 import io.github.davidg95.JTill.jtill.ServerConnection;
-import io.github.davidg95.JTill.jtillserver.ConnectionAcceptThread;
 import io.github.davidg95.JTill.jtillserver.Data;
 import io.github.davidg95.JTill.jtillserver.GUI;
 import io.github.davidg95.JTill.jtillserver.TillSplashScreen;
@@ -20,7 +19,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.InetAddress;
-import java.net.ServerSocket;
 import java.net.UnknownHostException;
 import java.util.Properties;
 import javax.swing.JOptionPane;
