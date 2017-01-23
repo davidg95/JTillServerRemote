@@ -55,7 +55,7 @@ public class JTillServerRemote {
         tryConnect();
         data = new Data(sc, g);
         if (!GraphicsEnvironment.isHeadless()) {
-            g = new GUI(data, sc, true);
+            g = new GUI(sc, true);
         }
     }
 
