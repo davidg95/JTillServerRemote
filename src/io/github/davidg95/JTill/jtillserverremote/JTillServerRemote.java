@@ -35,7 +35,7 @@ public class JTillServerRemote {
 
     public static String HOST_NAME = "RemoteAppConnection";
     public static String SERVER_ADDRESS = "127.0.0.1";
-    public static int PORT = 600;
+    public static int PORT = 52341;
 
     public static Image icon;
     public static TrayIcon trayIcon;
@@ -52,11 +52,12 @@ public class JTillServerRemote {
     public JTillServerRemote() {
         icon = new javax.swing.ImageIcon(getClass().getResource("/io/github/davidg95/JTill/resources/tillIcon.png")).getImage();
         sc = new ServerConnection(HOST_NAME);
-        tryConnect();
-        data = new Data(sc, g);
         if (!GraphicsEnvironment.isHeadless()) {
             g = new GUI(sc, true, icon);
         }
+        sc.setGUI(g);
+        tryConnect();
+        data = new Data(sc, g);
     }
 
     public void tryConnect() {
