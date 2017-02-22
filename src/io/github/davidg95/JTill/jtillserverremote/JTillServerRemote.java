@@ -51,7 +51,7 @@ public class JTillServerRemote {
 
     public JTillServerRemote() {
         icon = new javax.swing.ImageIcon(getClass().getResource("/io/github/davidg95/JTill/resources/tillIcon.png")).getImage();
-        sc = new ServerConnection(HOST_NAME);
+        sc = new ServerConnection();
         if (!GraphicsEnvironment.isHeadless()) {
             g = new GUI(sc, true, icon);
         }
