@@ -63,9 +63,10 @@ public class JTillServerRemote {
 
     public void tryConnect() {
         try {
-            JOptionPane.showInputDialog(null, "Enter JTill server address", "Connect to server", JOptionPane.PLAIN_MESSAGE);
+            SERVER_ADDRESS = JOptionPane.showInputDialog(null, "Enter JTill server address", "Connect to server", JOptionPane.PLAIN_MESSAGE);
             sc.connect(SERVER_ADDRESS, PORT, HOST_NAME);
         } catch (IOException ex) {
+            ex.printStackTrace();
             int opt = JOptionPane.showOptionDialog(null, "Error connecting to server " + SERVER_ADDRESS + " on port " + PORT + "\nTry again?", "Connection Error", JOptionPane.YES_NO_OPTION, JOptionPane.ERROR_MESSAGE, new javax.swing.ImageIcon(getClass().getResource("/io/github/davidg95/JTill/resources/tillIcon.png")), null, null);
             if (opt == JOptionPane.YES_OPTION) {
                 initialSetup();
