@@ -5,10 +5,8 @@
  */
 package io.github.davidg95.JTill.jtillserverremote;
 
-import io.github.davidg95.JTill.jtill.ServerConnection;
-import io.github.davidg95.JTill.jtillserver.Data;
-import io.github.davidg95.JTill.jtillserver.GUI;
-import io.github.davidg95.JTill.jtillserver.TillSplashScreen;
+import io.github.davidg95.JTill.jtill.*;
+import io.github.davidg95.JTill.jtillserver.*;
 import java.awt.GraphicsEnvironment;
 import java.awt.Image;
 import java.awt.TrayIcon;
@@ -41,6 +39,8 @@ public class JTillServerRemote {
     public static TrayIcon trayIcon;
 
     private static Properties properties;
+    
+    private final Settings settings;
 
     /**
      * @param args the command line arguments
@@ -52,8 +52,9 @@ public class JTillServerRemote {
     public JTillServerRemote() {
         icon = new javax.swing.ImageIcon(getClass().getResource("/io/github/davidg95/JTill/resources/tillIcon.png")).getImage();
         sc = new ServerConnection();
+        settings = new Settings();
         if (!GraphicsEnvironment.isHeadless()) {
-            g = new GUI(sc, true, icon);
+            g = new GUI(sc, settings, true, icon);
         }
         sc.setGUI(g);
         tryConnect();
