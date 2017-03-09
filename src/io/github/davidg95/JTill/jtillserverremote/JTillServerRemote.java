@@ -142,7 +142,7 @@ public class JTillServerRemote {
 
     public static void initialSetup() {
         SERVER_ADDRESS = (String) JOptionPane.showInputDialog(null, "Enter JTill Server IP address", "Initial Setup", JOptionPane.PLAIN_MESSAGE, null, null, SERVER_ADDRESS);
-        PORT = Integer.parseInt(JOptionPane.showInputDialog(null, "Enter port number", "600"));
+        PORT = Integer.parseInt(JOptionPane.showInputDialog(null, "Enter port number", "" + PORT));
     }
 
 }
