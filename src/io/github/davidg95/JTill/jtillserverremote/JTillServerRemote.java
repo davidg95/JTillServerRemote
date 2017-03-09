@@ -35,12 +35,15 @@ public class JTillServerRemote {
     public static String SERVER_ADDRESS;
     public static int PORT = 52341;
 
+    /**
+     * Default port number 52341.
+     */
+    public static final int DEFAULT_PORT = 52341;
+
     public static Image icon;
     public static TrayIcon trayIcon;
 
     private static Properties properties;
-    
-    private final Settings settings;
 
     /**
      * @param args the command line arguments
@@ -52,18 +55,17 @@ public class JTillServerRemote {
     public JTillServerRemote() {
         icon = new javax.swing.ImageIcon(getClass().getResource("/io/github/davidg95/JTill/resources/tillIcon.png")).getImage();
         sc = new ServerConnection();
-        settings = new Settings();
         if (!GraphicsEnvironment.isHeadless()) {
             g = new GUI(sc, true, icon);
         }
         sc.setGUI(g);
+        loadProperties();
         tryConnect();
         data = new Data(sc, g);
     }
 
     public void tryConnect() {
         try {
-            SERVER_ADDRESS = JOptionPane.showInputDialog(null, "Enter JTill server address", "Connect to server", JOptionPane.PLAIN_MESSAGE);
             sc.connect(SERVER_ADDRESS, PORT, HOST_NAME);
         } catch (IOException ex) {
             ex.printStackTrace();
