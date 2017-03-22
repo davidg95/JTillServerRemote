@@ -27,12 +27,26 @@ import javax.swing.JOptionPane;
  */
 public class JTillServerRemote {
 
-    public static Data data;
+    /**
+     * The connection to the server.
+     */
     public static ServerConnection sc;
+    /**
+     * The GUI.
+     */
     public static GUI g;
 
+    /**
+     * Host name for the connection.
+     */
     public static String HOST_NAME = "RemoteAppConnection";
+    /**
+     * Server address.
+     */
     public static String SERVER_ADDRESS;
+    /**
+     * Server port number.
+     */
     public static int PORT = 52341;
 
     /**
@@ -61,7 +75,6 @@ public class JTillServerRemote {
         sc.setGUI(g);
         loadProperties();
         tryConnect();
-        data = new Data(sc, g);
     }
 
     public void tryConnect() {
