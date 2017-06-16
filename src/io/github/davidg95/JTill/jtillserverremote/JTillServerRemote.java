@@ -19,6 +19,7 @@ import java.io.OutputStream;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.Properties;
+import java.util.UUID;
 import javax.swing.JOptionPane;
 
 /**
@@ -54,6 +55,11 @@ public class JTillServerRemote {
      */
     public static final int DEFAULT_PORT = 52341;
 
+    /**
+     * The UUID for this client.
+     */
+    private static UUID uuid;
+
     public static Image icon;
     public static TrayIcon trayIcon;
 
@@ -69,17 +75,17 @@ public class JTillServerRemote {
     public JTillServerRemote() {
         icon = new javax.swing.ImageIcon(getClass().getResource("/io/github/davidg95/JTill/resources/tillIcon.png")).getImage();
         sc = new ServerConnection();
+        loadProperties();
         if (!GraphicsEnvironment.isHeadless()) {
-            g = new GUI(sc, true, icon);
+            g = GUI.create(sc, true, icon);
         }
         sc.setGUI(g);
-        loadProperties();
         tryConnect();
     }
 
     public void tryConnect() {
         try {
-            sc.connect(SERVER_ADDRESS, PORT, HOST_NAME);
+            sc.connect(SERVER_ADDRESS, PORT, HOST_NAME, uuid);
         } catch (IOException ex) {
             ex.printStackTrace();
             int opt = JOptionPane.showOptionDialog(null, "Error connecting to server " + SERVER_ADDRESS + " on port " + PORT + "\nTry again?", "Connection Error", JOptionPane.YES_NO_OPTION, JOptionPane.ERROR_MESSAGE, new javax.swing.ImageIcon(getClass().getResource("/io/github/davidg95/JTill/resources/tillIcon.png")), null, null);
@@ -119,13 +125,14 @@ public class JTillServerRemote {
         InputStream in;
 
         try {
-            in = new FileInputStream("server.properties");
+            in = new FileInputStream("remote.properties");
 
             properties.load(in);
 
             HOST_NAME = properties.getProperty("host");
             SERVER_ADDRESS = properties.getProperty("address", SERVER_ADDRESS);
             PORT = Integer.parseInt(properties.getProperty("port", Integer.toString(PORT)));
+            uuid = UUID.fromString(properties.getProperty("uuid", UUID.randomUUID().toString()));
 
             in.close();
         } catch (FileNotFoundException | UnknownHostException ex) {
@@ -140,13 +147,14 @@ public class JTillServerRemote {
         OutputStream out;
 
         try {
-            out = new FileOutputStream("server.properties");
+            out = new FileOutputStream("remote.properties");
 
             HOST_NAME = InetAddress.getLocalHost().getHostName();
 
             properties.setProperty("host", HOST_NAME);
             properties.setProperty("address", SERVER_ADDRESS);
             properties.setProperty("port", Integer.toString(PORT));
+            properties.setProperty("uuid", uuid.toString());
 
             properties.store(out, null);
             out.close();
@@ -158,6 +166,7 @@ public class JTillServerRemote {
     public static void initialSetup() {
         SERVER_ADDRESS = (String) JOptionPane.showInputDialog(null, "Enter JTill Server IP address", "Initial Setup", JOptionPane.PLAIN_MESSAGE, null, null, SERVER_ADDRESS);
         PORT = Integer.parseInt(JOptionPane.showInputDialog(null, "Enter port number", "" + PORT));
+        uuid = UUID.randomUUID();
     }
 
 }
