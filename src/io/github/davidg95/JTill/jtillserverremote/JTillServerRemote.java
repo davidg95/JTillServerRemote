@@ -85,7 +85,9 @@ public class JTillServerRemote {
 
     public void tryConnect() {
         try {
-            sc.connect(SERVER_ADDRESS, PORT, HOST_NAME, uuid);
+            final Till t = sc.connect(SERVER_ADDRESS, PORT, HOST_NAME, uuid);
+            uuid = t.getUuid();
+            saveProperties();
         } catch (IOException ex) {
             ex.printStackTrace();
             int opt = JOptionPane.showOptionDialog(null, "Error connecting to server " + SERVER_ADDRESS + " on port " + PORT + "\nTry again?", "Connection Error", JOptionPane.YES_NO_OPTION, JOptionPane.ERROR_MESSAGE, new javax.swing.ImageIcon(getClass().getResource("/io/github/davidg95/JTill/resources/tillIcon.png")), null, null);
@@ -132,7 +134,10 @@ public class JTillServerRemote {
             HOST_NAME = properties.getProperty("host");
             SERVER_ADDRESS = properties.getProperty("address", SERVER_ADDRESS);
             PORT = Integer.parseInt(properties.getProperty("port", Integer.toString(PORT)));
-            uuid = UUID.fromString(properties.getProperty("uuid", UUID.randomUUID().toString()));
+            final String uuidString = properties.getProperty("uuid");
+            if (uuidString != null) {
+                uuid = UUID.fromString(properties.getProperty("uuid"));
+            }
 
             in.close();
         } catch (FileNotFoundException | UnknownHostException ex) {
@@ -154,7 +159,9 @@ public class JTillServerRemote {
             properties.setProperty("host", HOST_NAME);
             properties.setProperty("address", SERVER_ADDRESS);
             properties.setProperty("port", Integer.toString(PORT));
-            properties.setProperty("uuid", uuid.toString());
+            if (uuid != null) {
+                properties.setProperty("uuid", uuid.toString());
+            }
 
             properties.store(out, null);
             out.close();
@@ -166,7 +173,6 @@ public class JTillServerRemote {
     public static void initialSetup() {
         SERVER_ADDRESS = (String) JOptionPane.showInputDialog(null, "Enter JTill Server IP address", "Initial Setup", JOptionPane.PLAIN_MESSAGE, null, null, SERVER_ADDRESS);
         PORT = Integer.parseInt(JOptionPane.showInputDialog(null, "Enter port number", "" + PORT));
-        uuid = UUID.randomUUID();
     }
 
 }
