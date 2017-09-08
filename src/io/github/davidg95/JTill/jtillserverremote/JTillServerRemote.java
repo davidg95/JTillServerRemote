@@ -85,14 +85,12 @@ public class JTillServerRemote {
 
     public final void tryConnect() {
         try {
-            final Till t = sc.connect(SERVER_ADDRESS, PORT, HOST_NAME, uuid);
-            uuid = t.getUuid();
+            sc.connectAsRemote(SERVER_ADDRESS, PORT);
             saveProperties();
         } catch (IOException ex) {
             int opt = JOptionPane.showOptionDialog(null, "Error connecting to server " + SERVER_ADDRESS + " on port " + PORT + "\nTry again?", "Connection Error", JOptionPane.YES_NO_OPTION, JOptionPane.ERROR_MESSAGE, new javax.swing.ImageIcon(getClass().getResource("/io/github/davidg95/JTill/resources/tillIcon.png")), null, null);
             if (opt == JOptionPane.YES_OPTION) {
                 initialSetup();
-                saveProperties();
                 tryConnect();
             } else {
                 System.exit(0);
@@ -137,7 +135,6 @@ public class JTillServerRemote {
             if (uuidString != null) {
                 uuid = UUID.fromString(properties.getProperty("uuid"));
             }
-
             in.close();
         } catch (FileNotFoundException | UnknownHostException ex) {
             initialSetup();
