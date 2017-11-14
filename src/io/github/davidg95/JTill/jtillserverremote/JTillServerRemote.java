@@ -20,6 +20,8 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.Properties;
 import java.util.UUID;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 
 /**
@@ -28,10 +30,6 @@ import javax.swing.JOptionPane;
  */
 public class JTillServerRemote {
 
-    /**
-     * The connection to the server.
-     */
-    public static ServerConnection sc;
     /**
      * The GUI.
      */
@@ -74,18 +72,23 @@ public class JTillServerRemote {
 
     public JTillServerRemote() {
         icon = new javax.swing.ImageIcon(getClass().getResource("/io/github/davidg95/JTill/resources/tillIcon.png")).getImage();
-        sc = new ServerConnection();
+        DataConnect.dataconnect = ServerConnection.getInstance();
         loadProperties();
         if (!GraphicsEnvironment.isHeadless()) {
-            g = GUI.create(sc, true, icon);
+            try {
+                g = GUI.create(true, icon);
+            } catch (Exception ex) {
+                Logger.getLogger(JTillServerRemote.class.getName()).log(Level.SEVERE, null, ex);
+                JOptionPane.showMessageDialog(null, ex, "Error", JOptionPane.ERROR_MESSAGE);
+            }
         }
-        sc.setGUI(g);
+        DataConnect.dataconnect.setGUI(g);
         tryConnect();
     }
 
     public final void tryConnect() {
         try {
-            sc.connectAsRemote(SERVER_ADDRESS, PORT);
+            ServerConnection.getInstance().connectAsRemote(SERVER_ADDRESS, PORT);
             saveProperties();
         } catch (IOException ex) {
             int opt = JOptionPane.showOptionDialog(null, "Error connecting to server " + SERVER_ADDRESS + " on port " + PORT + "\nTry again?", "Connection Error", JOptionPane.YES_NO_OPTION, JOptionPane.ERROR_MESSAGE, new javax.swing.ImageIcon(getClass().getResource("/io/github/davidg95/JTill/resources/tillIcon.png")), null, null);
