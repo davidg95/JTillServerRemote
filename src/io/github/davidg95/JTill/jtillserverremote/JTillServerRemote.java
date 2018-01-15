@@ -23,6 +23,7 @@ import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
+import javax.swing.UnsupportedLookAndFeelException;
 
 /**
  *
@@ -71,6 +72,11 @@ public class JTillServerRemote {
     }
 
     public JTillServerRemote() {
+        try {
+            javax.swing.UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
+        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException ex) {
+            Logger.getLogger(TillServer.class.getName()).log(Level.WARNING, "Windows look and feel not supported on this system");
+        }
         icon = new javax.swing.ImageIcon(getClass().getResource("/io/github/davidg95/JTill/resources/tillIcon.png")).getImage();
         DataConnect.dataconnect = ServerConnection.getInstance();
         loadProperties();
