@@ -78,7 +78,7 @@ public class JTillServerRemote {
             Logger.getLogger(TillServer.class.getName()).log(Level.WARNING, "Windows look and feel not supported on this system");
         }
         icon = new javax.swing.ImageIcon(getClass().getResource("/io/github/davidg95/JTill/resources/tillIcon.png")).getImage();
-        DataConnect.dataconnect = ServerConnection.getInstance();
+        DataConnect.set(ServerConnection.getInstance());
         loadProperties();
         if (!GraphicsEnvironment.isHeadless()) {
             try {
@@ -88,7 +88,7 @@ public class JTillServerRemote {
                 JOptionPane.showMessageDialog(null, ex, "Error", JOptionPane.ERROR_MESSAGE);
             }
         }
-        DataConnect.dataconnect.setGUI(g);
+        DataConnect.get().setGUI(g);
         tryConnect();
     }
 
