@@ -110,7 +110,6 @@ public class JTillServerRemote {
     public void start() {
         if (!GraphicsEnvironment.isHeadless()) {
             TillSplashScreen.showSplashScreen();
-            g.databaseLogin();
             TillSplashScreen.addBar(50);
             if (!GraphicsEnvironment.isHeadless()) {
                 TillSplashScreen.hideSplashScreen();
