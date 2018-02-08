@@ -10,6 +10,7 @@ import io.github.davidg95.JTill.jtillserver.*;
 import java.awt.GraphicsEnvironment;
 import java.awt.Image;
 import java.awt.TrayIcon;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -63,6 +64,17 @@ public class JTillServerRemote {
     public static TrayIcon trayIcon;
 
     private static Properties properties;
+
+    private static String propertiesFile = System.getenv("APPDATA") + "\\JTill Server Remote\\remote.properties";
+
+    {
+        File file = new File(System.getenv("APPDATA") + "\\JTill Server Remote\\");
+        if (!file.exists()) {
+            Logger.getLogger(TillServer.class.getName()).log(Level.WARNING, "Creating appdata folder JTill Server Remote");
+            file.mkdir();
+            Logger.getLogger(TillServer.class.getName()).log(Level.WARNING, "Created folder " + file);
+        }
+    }
 
     /**
      * @param args the command line arguments
@@ -132,7 +144,7 @@ public class JTillServerRemote {
         InputStream in;
 
         try {
-            in = new FileInputStream("remote.properties");
+            in = new FileInputStream(propertiesFile);
 
             properties.load(in);
 
@@ -156,7 +168,7 @@ public class JTillServerRemote {
         OutputStream out;
 
         try {
-            out = new FileOutputStream("remote.properties");
+            out = new FileOutputStream(propertiesFile);
 
             HOST_NAME = InetAddress.getLocalHost().getHostName();
 
