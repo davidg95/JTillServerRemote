@@ -65,16 +65,7 @@ public class JTillServerRemote {
 
     private static Properties properties;
 
-    private static String propertiesFile = System.getenv("APPDATA") + "\\JTill Server Remote\\remote.properties";
-
-    {
-        File file = new File(System.getenv("APPDATA") + "\\JTill Server Remote\\");
-        if (!file.exists()) {
-            Logger.getLogger(TillServer.class.getName()).log(Level.WARNING, "Creating appdata folder JTill Server Remote");
-            file.mkdir();
-            Logger.getLogger(TillServer.class.getName()).log(Level.WARNING, "Created folder " + file);
-        }
-    }
+    private final String propertiesFile = System.getenv("APPDATA") + "\\JTill Server Remote\\remote.properties";
 
     /**
      * @param args the command line arguments
@@ -91,6 +82,9 @@ public class JTillServerRemote {
         }
         icon = new javax.swing.ImageIcon(getClass().getResource("/io/github/davidg95/JTill/resources/tillIcon.png")).getImage();
         DataConnect.set(ServerConnection.getInstance());
+        createAppDataFolder();
+        LogFileHandler handler = new LogFileHandler(System.getenv("APPDATA") + "\\JTill Server Remote\\");
+        Logger.getGlobal().addHandler(handler);
         loadProperties();
         if (!GraphicsEnvironment.isHeadless()) {
             try {
@@ -102,6 +96,19 @@ public class JTillServerRemote {
         }
         DataConnect.get().setGUI(g);
         tryConnect();
+    }
+
+    private void createAppDataFolder() {
+        File file = new File(System.getenv("APPDATA") + "\\JTill Server Remote\\");
+        if (!file.exists()) {
+            Logger.getLogger(TillServer.class.getName()).log(Level.WARNING, "Creating appdata folder JTill Server Remote");
+            if (file.mkdir()) {
+                new File(System.getenv("APPDATA") + "\\JTill Server Remote\\logs\\").mkdir();
+                Logger.getLogger(TillServer.class.getName()).log(Level.INFO, "Created folder " + file);
+            } else {
+                Logger.getLogger(TillServer.class.getName()).log(Level.SEVERE, "Error creating " + file);
+            }
+        }
     }
 
     public final void tryConnect() {
@@ -139,7 +146,7 @@ public class JTillServerRemote {
         return icon;
     }
 
-    public static void loadProperties() {
+    public void loadProperties() {
         properties = new Properties();
         InputStream in;
 
@@ -163,7 +170,7 @@ public class JTillServerRemote {
         }
     }
 
-    public static void saveProperties() {
+    public void saveProperties() {
         properties = new Properties();
         OutputStream out;
 
