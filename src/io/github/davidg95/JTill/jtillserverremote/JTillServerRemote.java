@@ -17,10 +17,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.Properties;
-import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
@@ -36,11 +34,7 @@ public class JTillServerRemote {
      * The GUI.
      */
     public static GUI g;
-
-    /**
-     * Host name for the connection.
-     */
-    public static String HOST_NAME = "RemoteAppConnection";
+    
     /**
      * Server address.
      */
@@ -54,11 +48,6 @@ public class JTillServerRemote {
      * Default port number 52341.
      */
     public static final int DEFAULT_PORT = 52341;
-
-    /**
-     * The UUID for this client.
-     */
-    private static UUID uuid;
 
     public static Image icon;
     public static TrayIcon trayIcon;
@@ -154,14 +143,9 @@ public class JTillServerRemote {
             in = new FileInputStream(propertiesFile);
 
             properties.load(in);
-
-            HOST_NAME = properties.getProperty("host");
+            
             SERVER_ADDRESS = properties.getProperty("address", SERVER_ADDRESS);
             PORT = Integer.parseInt(properties.getProperty("port", Integer.toString(PORT)));
-            final String uuidString = properties.getProperty("uuid");
-            if (uuidString != null) {
-                uuid = UUID.fromString(properties.getProperty("uuid"));
-            }
             in.close();
         } catch (FileNotFoundException | UnknownHostException ex) {
             initialSetup();
@@ -176,15 +160,9 @@ public class JTillServerRemote {
 
         try {
             out = new FileOutputStream(propertiesFile);
-
-            HOST_NAME = InetAddress.getLocalHost().getHostName();
-
-            properties.setProperty("host", HOST_NAME);
+            
             properties.setProperty("address", SERVER_ADDRESS);
             properties.setProperty("port", Integer.toString(PORT));
-            if (uuid != null) {
-                properties.setProperty("uuid", uuid.toString());
-            }
 
             properties.store(out, null);
             out.close();
