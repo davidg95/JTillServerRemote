@@ -28,7 +28,9 @@ import javax.swing.UnsupportedLookAndFeelException;
  *
  * @author David
  */
-public class JTillServerRemote {
+public class JTillServerRemote implements JTill {
+
+    private static final Logger LOG = Logger.getLogger(JTillServerRemote.class.getName());
 
     /**
      * The GUI.
@@ -55,6 +57,8 @@ public class JTillServerRemote {
     private static Properties properties;
 
     private final String propertiesFile = System.getenv("APPDATA") + "\\JTill Server Remote\\remote.properties";
+    
+    private final ServerConnection sc;
 
     /**
      * @param args the command line arguments
@@ -67,19 +71,20 @@ public class JTillServerRemote {
         try {
             javax.swing.UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
         } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException ex) {
-            Logger.getLogger(TillServer.class.getName()).log(Level.WARNING, "Windows look and feel not supported on this system");
+            LOG.log(Level.WARNING, "Windows look and feel not supported on this system");
         }
         icon = new javax.swing.ImageIcon(getClass().getResource("/io/github/davidg95/JTill/resources/tillIcon.png")).getImage();
-        DataConnect.set(ServerConnection.getInstance());
+        sc = ServerConnection.getInstance();
+        DataConnect.set(sc);
         createAppDataFolder();
         LogFileHandler handler = new LogFileHandler(System.getenv("APPDATA") + "\\JTill Server Remote\\");
-        Logger.getGlobal().addHandler(handler);
+        LOG.addHandler(handler);
         loadProperties();
         if (!GraphicsEnvironment.isHeadless()) {
             try {
-                g = GUI.create(true, icon);
+                g = GUI.create(this, true, icon);
             } catch (Exception ex) {
-                Logger.getLogger(JTillServerRemote.class.getName()).log(Level.SEVERE, null, ex);
+                LOG.log(Level.SEVERE, null, ex);
                 JOptionPane.showMessageDialog(null, ex, "Error", JOptionPane.ERROR_MESSAGE);
             }
         }
@@ -90,12 +95,12 @@ public class JTillServerRemote {
     private void createAppDataFolder() {
         File file = new File(System.getenv("APPDATA") + "\\JTill Server Remote\\");
         if (!file.exists()) {
-            Logger.getLogger(TillServer.class.getName()).log(Level.WARNING, "Creating appdata folder JTill Server Remote");
+            LOG.log(Level.WARNING, "Creating appdata folder JTill Server Remote");
             if (file.mkdir()) {
                 new File(System.getenv("APPDATA") + "\\JTill Server Remote\\logs\\").mkdir();
-                Logger.getLogger(TillServer.class.getName()).log(Level.INFO, "Created folder " + file);
+                LOG.log(Level.INFO, "Created folder " + file);
             } else {
-                Logger.getLogger(TillServer.class.getName()).log(Level.SEVERE, "Error creating " + file);
+                LOG.log(Level.SEVERE, "Error creating " + file);
             }
         }
     }
@@ -174,6 +179,16 @@ public class JTillServerRemote {
     public static void initialSetup() {
         SERVER_ADDRESS = (String) JOptionPane.showInputDialog(null, "Enter JTill Server IP address", "Initial Setup", JOptionPane.PLAIN_MESSAGE, null, null, SERVER_ADDRESS);
         PORT = Integer.parseInt(JOptionPane.showInputDialog(null, "Enter port number", "" + PORT));
+    }
+
+    @Override
+    public DataConnect getDataConnection() {
+        return sc;
+    }
+
+    @Override
+    public Logger getLogger() {
+        return LOG;
     }
 
 }
